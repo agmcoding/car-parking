@@ -7,7 +7,7 @@ This project was designed to be a Spring Web application, using REST API, simula
 ## How to use it
 
 To use it, when running the project, search in the browser for  localhost:8080  and the application will be set up.
-It is recommended to use the Postman toll.
+It is recommended to use the Postman tool.
 
 ## Which tools are being used
 
