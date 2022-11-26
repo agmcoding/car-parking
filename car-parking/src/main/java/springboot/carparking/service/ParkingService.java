@@ -7,13 +7,24 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import springboot.carparking.dto.ParkingCreateDTO;
+import springboot.carparking.dto.ParkingDTO;
 import springboot.carparking.exception.CarNotFoundException;
+import springboot.carparking.mapper.ParkingMapper;
 import springboot.carparking.model.Parking;
 
 @Service
 public class ParkingService {
+
+	private ParkingMapper PARKING_MAPPER;
+	
+	@Autowired
+	public void setPARKING_MAPPER(ParkingMapper pARKING_MAPPER) {
+		PARKING_MAPPER = pARKING_MAPPER;
+	}
 
 	public static Map<String, Parking> parkingMap = new HashMap<>();
 	
@@ -40,26 +51,29 @@ public class ParkingService {
 	}
 	
 	
-	public List<Parking> findAll() {
-		return parkingMap.values().stream().collect(Collectors.toList());
+	public List<ParkingDTO> findAll() {
+		List<Parking> parkingList =  parkingMap.values().stream().collect(Collectors.toList());
+		/* This avoids delivering objects directly from the repository/database: */
+		return PARKING_MAPPER.toParkingDTOList(parkingList);
 	}
 
-	public Parking findById(String id) {
+	public ParkingDTO findById(String id) {
 		Parking parking = parkingMap.get(id);
 		if (parking == null) {
 			throw new CarNotFoundException(id);
 		}
-		
-		return parking;
+		/* This bellow avoids delivering objects directly from the repository/database: */
+		return PARKING_MAPPER.toParkingDTO(parking);
 	}
 
 
-	public Parking create(Parking parkingCreate) {
+	public ParkingDTO create(ParkingCreateDTO dto) {
+		Parking parkingCreate = PARKING_MAPPER.toParkingCreate(dto);
 		var id = getUUID();
 		parkingCreate.setId(id);
 		parkingCreate.setEntryDate(LocalDateTime.now());
 		parkingMap.put(id, parkingCreate);
-		return parkingCreate;
+		return PARKING_MAPPER.toParkingDTO(parkingCreate);
 	}
 
 
@@ -69,8 +83,9 @@ public class ParkingService {
 	}
 
 
-	public Parking update(String id, Parking parkingUpdate) {
-		Parking parking = findById(id);
+	public ParkingDTO update(String id, ParkingCreateDTO dto) {
+		Parking parkingUpdate = PARKING_MAPPER.toParkingCreate(dto);
+		Parking parking = parkingMap.get(id);
 		parking.setBill(parkingUpdate.getBill());
 		parking.setColor(parkingUpdate.getColor());
 		parking.setId(parking.getId()); /* Here the id will still be the same. */
@@ -78,11 +93,11 @@ public class ParkingService {
 		parking.setModel(parkingUpdate.getModel());
 		parking.setState(parkingUpdate.getState());
 		parkingMap.replace(id, parking);
-		return parking;
+		return PARKING_MAPPER.toParkingDTO(parking);
 	}
 
 
-	public Parking exit(String id) {
+	public ParkingDTO exit(String id) {
 		findById(id); // Checking if the id exists.
 		parkingMap.get(id).setExitDate(LocalDateTime.now());
 		LocalDateTime parkingEntry = parkingMap.get(id).getEntryDate();
@@ -98,7 +113,7 @@ public class ParkingService {
 				parkingMap.get(id).setBill(10.0);
 			}
 		}
-		return parkingMap.get(id);
+		return PARKING_MAPPER.toParkingDTO(parkingMap.get(id));
 	}
 	
 

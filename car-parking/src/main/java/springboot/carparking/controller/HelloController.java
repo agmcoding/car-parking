@@ -11,10 +11,8 @@ public class HelloController {
 	@GetMapping
 	public String hello() {
 		return " Hello World! "
-				+ "This is the Home page. "
-				+ "If you want to access the Swagger page just "
-				+ "type in the browser "
-				+ " \" localhost:8080/swagger-ui/   \"  ";
+				+ "This is the Home page =D , "
+				+ "Send some requests by the address /parking ";
 	}
 	
 }
