@@ -2,26 +2,45 @@ package springboot.carparking.model;
 
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+/*In addition to GraalVM native image support, this release also completes our 
+ *migration to JakartaEE 9 and our baseline upgrade to Java 17. 
+ * @See: https://spring.io/blog/2022/10/20/spring-boot-3-0-0-rc1-available-now#:~:text=This%20is%20our%20first%20release,changes%20if%20we%20find%20issues.
+*/
+
+@Component
+@Entity
 public class Parking {
 	
-	
+	@Id
+	@Column( length = 100 )
 	private String id;
+	
+	@Column( nullable = false , length = 10)
 	private String license;
+	
+	@Column( nullable = false , length = 50)
 	private String state;
+	
+	@Column( nullable = false , length = 30)
 	private String model;
+	
+	@Column( nullable = false , length = 30)
 	private String color;
+	
+	@Column( nullable = false )
 	private LocalDateTime entryDate;
+	
+	@Column()
 	private LocalDateTime exitDate;
+	
+	@Column
 	private Double bill;
-
-	public Parking(String id, String license, String state, String model, String color) {
-		super();
-		this.id = id;
-		this.license = license;
-		this.state = state;
-		this.model = model;
-		this.color = color;
-	}
 
 //	Constructor without fields:	
 	public Parking() {

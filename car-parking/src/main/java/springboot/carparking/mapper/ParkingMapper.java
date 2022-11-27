@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import springboot.carparking.dto.ParkingCreateDTO;
@@ -20,10 +21,15 @@ public class ParkingMapper {
 	 * - Source: modelmapper.org
 	 */
 	
-	private static final ModelMapper MODEL_MAPPER = new ModelMapper();
+	private ModelMapper modelMapper;
+	
+	@Autowired
+	public void setModelMapper(ModelMapper modelMapper) {
+		this.modelMapper = modelMapper;
+	}
 
 	public ParkingDTO toParkingDTO(Parking parking) {
-		return MODEL_MAPPER.map(parking, ParkingDTO.class);
+		return modelMapper.map(parking, ParkingDTO.class);
 	}
 	
 	public List<ParkingDTO> toParkingDTOList(List<Parking> parkingList) {
@@ -31,11 +37,11 @@ public class ParkingMapper {
 	}
 
 	public Parking toParking(ParkingDTO dto) {
-		return MODEL_MAPPER.map(dto, Parking.class);
+		return modelMapper.map(dto, Parking.class);
 	}
 
 	public Parking toParkingCreate(ParkingCreateDTO dto) {
-		return MODEL_MAPPER.map(dto, Parking.class);
+		return modelMapper.map(dto, Parking.class);
 	}
 
 	

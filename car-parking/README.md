@@ -11,6 +11,6 @@ It is recommended to use the Postman tool.
 
 ## Which tools are being used
 
-This project uses Java 17 version, Spring Boot, Spring Web, Maven and other libraries and frameworks (like Postman). 
+This project uses Java 17 version, Spring Boot (3.0.0 version), Spring Web, Java Persistance API, H2 Database, Maven and other libraries and frameworks (like Postman). 
 
 Thanks for passing by!
